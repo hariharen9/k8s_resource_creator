@@ -1,0 +1,301 @@
+{
+  "routerTemplate": {
+    "apiVersion": "v1",
+    "kind": "Router",
+    "metadata": {
+      "annotations": {
+        "RequestID": ""
+      },
+      "namespace": "",
+      "name": ""
+    },
+    "labels": {
+      "Region": "US-south"
+    },
+    "spec": {
+      "vpcid": "",
+      "routeDistinguisher": "65132:10",
+      "addressPrefixes": [
+        "192.11.32.0/24",
+        "192.11.33.0/24"
+      ],
+      "serviceGatewayIP": "192.21.20.1",
+      "serviceGatewayStaticRoutes": [
+        "192.21.21.0/24",
+        "192.21.22.0/24"
+      ]
+    }
+  },
+  "securityGroupTemplate": {
+    "apiVersion": "v1",
+    "kind": "SecurityGroup",
+    "metadata": {
+      "namespace": "",
+      "name": "",
+      "annotations": {
+        "RequestID": "",
+        "description": "test security group"
+      },
+      "labels": {
+        "ResourceName": "",
+        "VPCID": ""
+      }
+    },
+    "spec": {
+      "vpcid": "",
+      "rules": [
+        {
+          "uid": "",
+          "protocol": "tcp",
+          "direction": "egress",
+          "portMin": 22,
+          "portMax": 22
+        }
+      ]
+    }
+  },
+  
+  "networkACLTemplate": {
+    "apiVersion": "v1",
+    "kind": "NetworkACL",
+    "metadata": {
+      "namespace": "",
+      "name": "",
+      "annotations": {
+        "description": "test network ACL"
+      }
+    },
+    "spec": {
+      "vpcid": "",
+      "rules": [
+        {
+          "uid": "",
+          "protocol": "udp",
+          "direction": "inbound",
+          "sourcePortRange": {
+            "portMin": 501,
+            "portMax": 601
+          },
+          "destinationPortRange": {
+            "portMin": 100,
+            "portMax": 200
+          },
+          "action": "allow"
+        },
+        {
+          "uid": "",
+          "protocol": "icmp",
+          "direction": "inbound",
+          "icmpType": 50,
+          "icmpCode": 100,
+          "action": "deny"
+        }
+      ]
+    }
+  },
+  "networkTemplate": {
+    "apiVersion": "v1",
+    "kind": "Network",
+    "metadata": {
+      "annotations": {
+        "RequestID": ""
+      },
+      "namespace": "",
+      "name": ""
+    },
+    "spec": {
+      "routerName": "",
+      "cidr": "",
+      "vpcid": "",
+      "aclName": "",
+      "publicGatewayUID": "",
+      "publicGatewayIP": "",
+      "routingTableName": ""
+    }
+  },
+  "virtualNicTemplate": {
+    "apiVersion": "v1",
+    "kind": "VirtualNic",
+    "metadata": {
+      "annotations": {
+        "RequestID": ""
+      },
+      "namespace": "",
+      "name": "",
+      "labels": {
+        "AvailabilityZone": "testAvailZone",
+        "OwnerNamespace": "",
+        "ResourceGroup": "",
+        "ResourceID": "",
+        "ResourceName": "primary",
+        "VPCID": "",
+        "vm_name": "",
+        "InstanceID": "",
+        "selflink": ""
+      }
+    },
+    "spec": {
+      "maxMbps": 1000,
+      "name": "",
+      "network": {
+        "Name": "",
+        "Namespace": ""
+      },
+      "node": {
+        "name": ""
+      },
+      "resourceName": "primary",
+      "floatingIP": "",
+      "virtualMachine":{
+        "Name": "",
+        "Namespace": ""
+      },
+      "sgNames": [],
+      "metadataServiceSettings":{
+        "accessEnabled": true,
+        "guestPort": 22,
+        "guestSecurePort": 0,
+        "responseHopLimit": 0
+      }
+    }
+  },
+  "routingTableTemplate": {
+    "apiVersion": "v1",
+    "kind": "RoutingTable",
+    "metadata": {
+      "namespace": "",
+      "name": ""
+    },
+    "spec": {
+      "vpcid": "",
+      "routes": [
+        {
+          "uuid": "",
+          "destinationCIDR": "192.121.2.0/24",
+          "nextHopIP": "192.211.2.1",
+          "action": "deliver"
+        },
+        {
+          "uuid": "",
+          "destinationCIDR": "192.121.3.0/24",
+          "action": "drop"
+        },
+        {
+          "uuid": "",
+          "destinationCIDR": "192.121.4.0/24",
+          "nextHopIP": "192.211.4.1",
+          "action": "deliver"
+        },
+        {
+          "uuid": "",
+          "destinationCIDR": "192.121.5.0/24",
+          "action": "delegate"
+        }
+      ]
+    }
+  },
+  "ingressRoutingTableTemplate": {
+    "apiVersion": "v1",
+    "kind": "RoutingTable",
+    "metadata": {
+      "namespace": "",
+      "name": ""
+    },
+    "spec": {
+      "vpcid": "",
+      "directLinkIngress": true,
+      "routes": [
+        {
+          "uuid": "",
+          "destinationCIDR": "192.222.12.0/24",
+          "nextHopIP": "192.222.12.1",
+          "action": "deliver"
+        }
+      ]
+    }
+  },
+  "foreignNetworkTemplate": {
+    "apiVersion": "v1",
+    "kind": "Network",
+    "metadata": {
+      "namespace": "",
+      "name": "",
+      "annotations": {
+        "RequestID": ""
+      }
+    },
+    "spec": {
+      "routerName": "",
+      "cidr": "",
+      "vpcid": "",
+      "aclName": "",
+      "publicGatewayUID": "",
+      "publicGatewayIP": "",
+      "routingTableName": ""
+    }
+  },
+  "loadBalancerTemplate": {
+    "apiVersion": "v1",
+    "kind": "LoadBalancer",
+    "metadata": {
+      "namespace": "",
+      "name": ""
+    },
+    "spec": {
+      "vpcid": "",
+      "type": "internal_service",
+      "ipv4": "192.168.21.11"
+    }
+  },
+  "lbPoolTemplate": {
+    "apiVersion": "v1",
+    "kind": "LBPool",
+    "metadata": {
+      "namespace": "",
+      "name": ""
+    },
+    "spec": {
+      "vpcid": "",
+      "lbName": "",
+      "protocol": "tcp",
+      "algorithm": "round_robin",
+      "healthMonitor": {
+        "checkFrequency": 2,
+        "timeout": 1,
+        "maxRetries": 3,
+        "port": 443,
+        "type": "tcp"
+      }
+    }
+  },
+  "lbPoolMemberTemplate": {
+    "apiVersion": "v1",
+    "kind": "LBPoolMember",
+    "metadata": {
+      "namespace": "",
+      "name": ""
+    },
+    "spec": {
+      "lbPoolName": "",
+      "protocolPort": 443,
+      "weight": 100,
+      "vnicId": ""
+    }
+  },
+  "lbListenerTemplate": {
+    "apiVersion": "v1",
+    "kind": "LBListener",
+    "metadata": {
+      "namespace": "",
+      "name": ""
+    },
+    "spec": {
+      "vpcid": "",
+      "lbName": "",
+      "defaultPoolID": "",
+      "protocol": "tcp",
+      "port": 8443,
+      "portMax": 8888
+    }
+  }
+}
