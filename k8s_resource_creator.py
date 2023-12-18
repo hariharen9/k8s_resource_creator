@@ -1,4 +1,10 @@
 ######################################################################
+# This script can be used to create objects for a router, multiple
+# networks and multiple endpoints on each networks
+# on each compute node
+# You can specify network count, endpoint count.
+# If not specified, it will use defaults.
+#
 # usage: 
 # python3 ./pai.py Apply/Delete environment networkCount endpointCount SetCount SaveYAMLInformation(Y/N)  ApplyLB(Y/N) --stop-at "(ResourceName)"
 ######################################################################
@@ -98,6 +104,7 @@ def create_security_groups():
     print("\nCreating Security Groups")
     for sgnum in range(1, 3):
         reqid = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+        global sgName
         sgName = f"{rPrefix}-{str(uuid.uuid4())}"
 
         sg_template = template_data["securityGroupTemplate"].copy()
@@ -120,6 +127,7 @@ def create_nacls():
     print("\nCreating NACLs")
     for naclnum in range(1, 3):
         reqid = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+        global naclName
         naclName = f"{rPrefix}-{str(uuid.uuid4())}"
 
         nacl_template = template_data["networkACLTemplate"].copy()
@@ -408,8 +416,8 @@ if sys.argv[1].lower() in ["apply", "a"]:
     if os.path.exists("/root/stresstesting/template.json"):
         with open("/root/stresstesting/template.json", "r") as json_file:
             template_data = json.load(json_file)
-    elif os.path.exists("C:/Users/Hariharen/Desktop/template.json"):
-        with open("C:/Users/Hariharen/Desktop/template.json", "r") as json_file:
+    elif os.path.exists("/Users/hariharen/Desktop/StressTesting/stressTesting/template.json"):
+        with open("/Users/hariharen/Desktop/StressTesting/stressTesting/template.json", "r") as json_file:
             template_data = json.load(json_file)
     
     
@@ -523,6 +531,7 @@ def deleteResources(file_path):
             confirmation = True
             for line in lines:
                 parts = line.strip().split(", ")
+                count = 0
                 if len(parts) == 3:
                     namespace, kind, name = parts
                     if kind and namespace and name: 
@@ -539,10 +548,12 @@ def deleteResources(file_path):
                         result = run_command(delete_command)
                         if result:
                             print(result)
+                            count += 1
                     else:
                         print(f"Invalid line in file: {line}")
                 else:
                     print(f"{line}")
+            print(f"Total resources deleted: {count}")
             del_file = input("Do you wish to delete the Applied_Resources.txt file? :  ")
             if del_file.lower() in ["yes", "y"]:
                 run_command(f"rm {file_path}")
@@ -560,9 +571,12 @@ if __name__ == "__main__":
         if stop_at_index != -1 and stop_at_index + 1 < len(sys.argv):
             stop_at_resource = sys.argv[stop_at_index + 1].capitalize()
             for routerIndex in range(1, setCount + 1): #For number of sets of resources
+                print(f"--------Creating Router Set Number {routerIndex} / {setCount} --------")
                 applyResources(stop_at_resource)
         else:
             for routerIndex in range(1, setCount + 1): #For number of sets of resources
+                print(f"--------Creating Router Set Number {routerIndex} / {setCount} --------")
+
                 applyResources()  # No --stop-at flag provided, create all resources
                 
                 
@@ -571,4 +585,4 @@ if __name__ == "__main__":
         
         
     else:
-        print("Please specify if you are trying to APPLY or DELETE the resources")
+        print("Please specify if you are trying to APPLY or DELETE the resources")   
